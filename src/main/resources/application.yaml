@@ -1,0 +1,3 @@
+eddb:
+  url: https://eddb.io/archive/v5/
+  factions-file: factions.json
