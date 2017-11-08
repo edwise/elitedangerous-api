@@ -18,11 +18,15 @@ import java.util.Optional;
 public class AppStartupRunner implements ApplicationRunner {
     private static final Logger log = LoggerFactory.getLogger(AppStartupRunner.class);
 
-    @Autowired
-    private EddbConfig eddbConfig;
+    private final EddbConfig eddbConfig;
+
+    private final DownloadService downloadService;
 
     @Autowired
-    private DownloadService downloadService;
+    public AppStartupRunner(EddbConfig eddbConfig, DownloadService downloadService) {
+        this.eddbConfig = eddbConfig;
+        this.downloadService = downloadService;
+    }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
