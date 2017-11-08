@@ -29,7 +29,7 @@ public class DownloadServiceImpl implements DownloadService {
     public Optional<String> downloadFileTextContent(String url) {
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
         if (HttpStatus.OK.equals(responseEntity.getStatusCode())) {
-            return Optional.of(responseEntity.getBody());
+            return Optional.ofNullable(responseEntity.getBody());
         } else {
             log.error(String.format("Cant download file from url [%s], statusCode [%s]", url, responseEntity.getStatusCode()));
             return Optional.empty();
