@@ -1,3 +1,5 @@
 eddb:
   url: https://eddb.io/archive/v5/
   factions-file: factions.json
+  stations-file: stations.json
+  systems-file:  systems_populated.json

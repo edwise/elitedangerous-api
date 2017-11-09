@@ -1,6 +1,8 @@
 package com.edwise.elitedangerous.config;
 
 import com.edwise.elitedangerous.bean.Faction;
+import com.edwise.elitedangerous.bean.Station;
+import com.edwise.elitedangerous.bean.System;
 import com.edwise.elitedangerous.config.bean.EddbConfig;
 import com.edwise.elitedangerous.service.DownloadService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Component
 public class AppStartupRunner implements ApplicationRunner {
@@ -34,12 +37,36 @@ public class AppStartupRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        Optional<String> fileContent =
+        Random rand = new Random();
+
+        Optional<String> factionsFileContent =
                 downloadService.downloadFileTextContent(eddbConfig.getUrl() + eddbConfig.getFactionsFile());
 
-        CollectionType javaType = objectMapper.getTypeFactory()
-                                              .constructCollectionType(List.class, Faction.class);
-        List<Faction> factions = objectMapper.readValue(fileContent.orElse("[]"), javaType);
-        log.info("Size of json downloaded: {}", factions.size());
+        CollectionType factionsType = objectMapper.getTypeFactory()
+                                                  .constructCollectionType(List.class, Faction.class);
+        List<Faction> factions = objectMapper.readValue(factionsFileContent.orElse("[]"), factionsType);
+        log.info("Size of factions json downloaded: {}", factions.size());
+        log.info("Faction example: {}", factions.get(rand.nextInt(factions.size())).getName());
+
+
+        Optional<String> stationsFileContent =
+                downloadService.downloadFileTextContent(eddbConfig.getUrl() + eddbConfig.getStationsFile());
+
+        CollectionType stationsType = objectMapper.getTypeFactory()
+                                                  .constructCollectionType(List.class, Station.class);
+        List<Station> stations = objectMapper.readValue(stationsFileContent.orElse("[]"), stationsType);
+        log.info("Size of stations json downloaded: {}", stations.size());
+        log.info("Station example: {}", stations.get(rand.nextInt(stations.size())).getName());
+
+
+        Optional<String> systemsFileContent =
+                downloadService.downloadFileTextContent(eddbConfig.getUrl() + eddbConfig.getSystemsFile());
+
+        CollectionType systemsType = objectMapper.getTypeFactory()
+                                                 .constructCollectionType(List.class, System.class);
+        List<System> systems = objectMapper.readValue(systemsFileContent.orElse("[]"), systemsType);
+        log.info("Size of system json downloaded: {}", systems.size());
+        log.info("System example: {}", systems.get(rand.nextInt(systems.size())).getName());
+
     }
 }
