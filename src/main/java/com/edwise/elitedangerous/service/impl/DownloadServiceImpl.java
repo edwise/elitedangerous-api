@@ -11,9 +11,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
-/**
- * Created by Eduardo Antón <eduardo.anton@taptapnetworks.com> on 08/11/2017.
- */
 @Service
 public class DownloadServiceImpl implements DownloadService {
     private static final Logger log = LoggerFactory.getLogger(DownloadServiceImpl.class);
