@@ -15,9 +15,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Created by Eduardo Antón <eduardo.anton@taptapnetworks.com> on 08/11/2017.
- */
 @Component
 public class AppStartupRunner implements ApplicationRunner {
     private static final Logger log = LoggerFactory.getLogger(AppStartupRunner.class);

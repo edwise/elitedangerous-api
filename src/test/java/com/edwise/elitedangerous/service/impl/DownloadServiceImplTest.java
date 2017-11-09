@@ -19,13 +19,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-/**
- * Created by Eduardo Antón <eduardo.anton@taptapnetworks.com> on 08/11/2017.
- */
 @RunWith(MockitoJUnitRunner.class)
 public class DownloadServiceImplTest {
     private static final String FILE_CONTENT = "[{fileContent}]";
-    private static final String UR_FILE = "http://test.com/file.json";
+    private static final String UR_FILE      = "http://test.com/file.json";
 
     @Mock
     private RestTemplate restTemplate;
