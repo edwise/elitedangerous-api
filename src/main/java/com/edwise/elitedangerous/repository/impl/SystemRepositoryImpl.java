@@ -20,4 +20,9 @@ public class SystemRepositoryImpl implements SystemRepository {
         systems = systemsList;
         log.info("Size of systems json downloaded: {}", systems.size());
     }
+
+    @Override
+    public double calculateDistance(System system1, System system2) {
+        return system1.distanceTo(system2);
+    }
 }
