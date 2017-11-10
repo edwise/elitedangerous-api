@@ -17,8 +17,11 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Component
 public class AppStartupRunner implements ApplicationRunner {
@@ -26,55 +29,88 @@ public class AppStartupRunner implements ApplicationRunner {
 
     private final EddbConfig eddbConfig;
 
+    private ObjectMapper objectMapper;
+
     private DownloadService downloadService;
     private FactionRepository factionRepository;
     private StationRepository stationRepository;
     private SystemRepository systemRepository;
-
-    private ObjectMapper objectMapper;
 
     @Autowired
     public AppStartupRunner(EddbConfig eddbConfig, DownloadService downloadService, ObjectMapper objectMapper,
                             FactionRepository factionRepository, StationRepository stationRepository,
                             SystemRepository systemRepository) {
         this.eddbConfig = eddbConfig;
+        this.objectMapper = objectMapper;
         this.downloadService = downloadService;
         this.factionRepository = factionRepository;
         this.stationRepository = stationRepository;
         this.systemRepository = systemRepository;
-        this.objectMapper = objectMapper;
     }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         log.info("Initializing app, filling repositories...");
 
-        Optional<String> factionsFileContent =
-                downloadService.downloadFileTextContent(eddbConfig.getUrl() + eddbConfig.getFactionsFile());
+        CompletableFuture<Void> factionsFuture = CompletableFuture.runAsync(this::downloadFactionData);
+        CompletableFuture<Void> stationsFuture = CompletableFuture.runAsync(this::downloadStationData);
+        CompletableFuture<Void> systemsFuture = CompletableFuture.runAsync(this::downloadSystemData);
 
-        CollectionType factionsType = objectMapper.getTypeFactory()
-                                                  .constructCollectionType(List.class, Faction.class);
-        List<Faction> factions = objectMapper.readValue(factionsFileContent.orElse("[]"), factionsType);
-        factionRepository.fillData(factions);
+        CompletableFuture.allOf(factionsFuture, stationsFuture, systemsFuture)
+                         .thenRun(() -> log.info("Application started! Data filled in repositories."));
+    }
 
-
-        Optional<String> stationsFileContent =
-                downloadService.downloadFileTextContent(eddbConfig.getUrl() + eddbConfig.getStationsFile());
-
-        CollectionType stationsType = objectMapper.getTypeFactory()
-                                                  .constructCollectionType(List.class, Station.class);
-        List<Station> stations = objectMapper.readValue(stationsFileContent.orElse("[]"), stationsType);
-        stationRepository.fillData(stations);
-
+    private void downloadSystemData() {
+        log.info("Starting systems download...");
 
         Optional<String> systemsFileContent =
                 downloadService.downloadFileTextContent(eddbConfig.getUrl() + eddbConfig.getSystemsFile());
 
         CollectionType systemsType = objectMapper.getTypeFactory()
                                                  .constructCollectionType(List.class, System.class);
-        List<System> systems = objectMapper.readValue(systemsFileContent.orElse("[]"), systemsType);
+        List<System> systems;
+        try {
+            systems = objectMapper.readValue(systemsFileContent.orElse("[]"), systemsType);
+        } catch (IOException e) {
+            log.error("Cant parser systems data with objectMapper", e);
+            systems = Collections.emptyList();
+        }
         systemRepository.fillData(systems);
+    }
 
-        log.info("Application started! Data filled in repositories.");
+    private void downloadStationData() {
+        log.info("Starting stations download...");
+
+        Optional<String> stationsFileContent =
+                downloadService.downloadFileTextContent(eddbConfig.getUrl() + eddbConfig.getStationsFile());
+
+        CollectionType stationsType = objectMapper.getTypeFactory()
+                                                  .constructCollectionType(List.class, Station.class);
+        List<Station> stations;
+        try {
+            stations = objectMapper.readValue(stationsFileContent.orElse("[]"), stationsType);
+        } catch (IOException e) {
+            log.error("Cant parser stations data with objectMapper", e);
+            stations = Collections.emptyList();
+        }
+        stationRepository.fillData(stations);
+    }
+
+    private void downloadFactionData() {
+        log.info("Starting factions download...");
+
+        Optional<String> factionsFileContent =
+                downloadService.downloadFileTextContent(eddbConfig.getUrl() + eddbConfig.getFactionsFile());
+
+        CollectionType factionsType = objectMapper.getTypeFactory()
+                                                  .constructCollectionType(List.class, Faction.class);
+        List<Faction> factions;
+        try {
+            factions = objectMapper.readValue(factionsFileContent.orElse("[]"), factionsType);
+        } catch (IOException e) {
+            log.error("Cant parser factions data with objectMapper", e);
+            factions = Collections.emptyList();
+        }
+        factionRepository.fillData(factions);
     }
 }
