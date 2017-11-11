@@ -3,6 +3,7 @@ package com.edwise.elitedangerous.config;
 import com.edwise.elitedangerous.bean.Faction;
 import com.edwise.elitedangerous.bean.Station;
 import com.edwise.elitedangerous.bean.System;
+import com.edwise.elitedangerous.bean.SystemPair;
 import com.edwise.elitedangerous.config.bean.EddbConfig;
 import com.edwise.elitedangerous.repository.FactionRepository;
 import com.edwise.elitedangerous.repository.StationRepository;
@@ -31,10 +32,10 @@ public class AppStartupRunner implements ApplicationRunner {
 
     private ObjectMapper objectMapper;
 
-    private DownloadService downloadService;
+    private DownloadService   downloadService;
     private FactionRepository factionRepository;
     private StationRepository stationRepository;
-    private SystemRepository systemRepository;
+    private SystemRepository  systemRepository;
 
     @Autowired
     public AppStartupRunner(EddbConfig eddbConfig, DownloadService downloadService, ObjectMapper objectMapper,
@@ -52,12 +53,25 @@ public class AppStartupRunner implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         log.info("Initializing app, filling repositories...");
 
+        long startDownloadTime = java.lang.System.nanoTime();
+
         CompletableFuture<Void> factionsFuture = CompletableFuture.runAsync(this::downloadFactionData);
         CompletableFuture<Void> stationsFuture = CompletableFuture.runAsync(this::downloadStationData);
         CompletableFuture<Void> systemsFuture = CompletableFuture.runAsync(this::downloadSystemData);
 
         CompletableFuture.allOf(factionsFuture, stationsFuture, systemsFuture)
-                         .thenRun(() -> log.info("Application started! Data filled in repositories."));
+                         .thenRun(() -> {
+                             log.info("Application started! Data filled in repositories.");
+                             long endDownloadTime = java.lang.System.nanoTime();
+                             log.info("Total download time (millis): {}", (endDownloadTime - startDownloadTime) / 1_000_000);
+
+                             List<SystemPair> closestLonelySystems = systemRepository.getClosestLonelySystems();
+                             log.info("Systems paired:");
+                             closestLonelySystems.forEach(pair -> log.info("- {} <-> {} -", pair.getSystemA().getName(),
+                                                                           pair.getSystemB().getName()));
+                             log.info("--------");
+                             log.info("- Total pairs: {}", closestLonelySystems.size());
+                         });
     }
 
     private void downloadSystemData() {
