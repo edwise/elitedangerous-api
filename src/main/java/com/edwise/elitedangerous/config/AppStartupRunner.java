@@ -54,7 +54,6 @@ public class AppStartupRunner implements ApplicationRunner {
         log.info("Initializing app, filling repositories...");
 
         long startDownloadTime = java.lang.System.nanoTime();
-
         CompletableFuture<Void> factionsFuture = CompletableFuture.runAsync(this::downloadFactionData);
         CompletableFuture<Void> stationsFuture = CompletableFuture.runAsync(this::downloadStationData);
         CompletableFuture<Void> systemsFuture = CompletableFuture.runAsync(this::downloadSystemData);
@@ -64,14 +63,17 @@ public class AppStartupRunner implements ApplicationRunner {
                              log.info("Application started! Data filled in repositories.");
                              long endDownloadTime = java.lang.System.nanoTime();
                              log.info("Total download time (millis): {}", (endDownloadTime - startDownloadTime) / 1_000_000);
-
-                             List<SystemPair> closestLonelySystems = systemRepository.getClosestLonelySystems();
-                             log.info("Systems paired:");
-                             closestLonelySystems.forEach(pair -> log.info("- {} <-> {} -", pair.getSystemA().getName(),
-                                                                           pair.getSystemB().getName()));
-                             log.info("--------");
-                             log.info("- Total pairs: {}", closestLonelySystems.size());
+                             obtainClosestLonelySystems();
                          });
+    }
+
+    private void obtainClosestLonelySystems() {
+        List<SystemPair> closestLonelySystems = systemRepository.getClosestLonelySystems();
+        log.info("Systems paired:");
+        closestLonelySystems.forEach(pair -> log.info("- {} <-> {} -", pair.getSystemA().getName(),
+                                                      pair.getSystemB().getName()));
+        log.info("--------");
+        log.info("- Total pairs: {}", closestLonelySystems.size());
     }
 
     private void downloadSystemData() {
