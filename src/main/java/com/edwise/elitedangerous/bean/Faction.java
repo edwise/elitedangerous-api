@@ -5,14 +5,14 @@ import java.util.Objects;
 public class Faction {
 
     private Integer id;
-    private String name;
+    private String  name;
     private Integer updatedAt;
     private Integer governmentId;
-    private String government;
+    private String  government;
     private Integer allegianceId;
-    private String allegiance;
+    private String  allegiance;
     private Integer stateId;
-    private String state;
+    private String  state;
     private Integer homeSystemId;
     private Boolean isPlayerFaction;
 

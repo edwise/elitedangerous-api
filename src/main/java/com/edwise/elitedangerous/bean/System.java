@@ -338,6 +338,12 @@ public class System {
         this.minorFactionPresences = minorFactionPresences;
     }
 
+    public double distanceTo(System otherSystem) {
+        return Math.sqrt(Math.pow(x - otherSystem.getX(), 2)
+                         + Math.pow(y - otherSystem.getY(), 2)
+                         + Math.pow(z - otherSystem.getZ(), 2));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
