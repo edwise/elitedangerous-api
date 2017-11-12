@@ -339,9 +339,9 @@ public class System {
     }
 
     public double distanceTo(System otherSystem) {
-        return Math.sqrt(Math.pow(x-otherSystem.getX(), 2)
-                         + Math.pow(y-otherSystem.getY(), 2)
-                         + Math.pow(z-otherSystem.getZ(), 2));
+        return Math.sqrt(Math.pow(x - otherSystem.getX(), 2)
+                         + Math.pow(y - otherSystem.getY(), 2)
+                         + Math.pow(z - otherSystem.getZ(), 2));
     }
 
     @Override
