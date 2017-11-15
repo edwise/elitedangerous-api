@@ -12,18 +12,18 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/systempair")
-public class SystemPairController {
+@RequestMapping("/api/closestlonelysystems")
+public class ClosestLonelySystemsController {
 
     private SystemService systemService;
 
     @Autowired
-    public SystemPairController(SystemService systemService) {
+    public ClosestLonelySystemsController(SystemService systemService) {
         this.systemService = systemService;
     }
 
     @GetMapping
-    public ResponseEntity<List<SystemPair>> getAllSystems() {
+    public ResponseEntity<List<SystemPair>> getAllClosestLonelySystems() {
         List<SystemPair> systemPairs = systemService.obtainClosestLonelySystems();
         return new ResponseEntity<>(systemPairs, HttpStatus.OK);
     }
