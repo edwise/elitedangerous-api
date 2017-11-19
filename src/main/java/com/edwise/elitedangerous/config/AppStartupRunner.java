@@ -3,7 +3,6 @@ package com.edwise.elitedangerous.config;
 import com.edwise.elitedangerous.bean.Faction;
 import com.edwise.elitedangerous.bean.Station;
 import com.edwise.elitedangerous.bean.System;
-import com.edwise.elitedangerous.bean.SystemPair;
 import com.edwise.elitedangerous.config.bean.EddbConfig;
 import com.edwise.elitedangerous.repository.FactionRepository;
 import com.edwise.elitedangerous.repository.StationRepository;
@@ -63,17 +62,7 @@ public class AppStartupRunner implements ApplicationRunner {
                              log.info("Application started! Data filled in repositories.");
                              long endDownloadTime = java.lang.System.nanoTime();
                              log.info("Total download time (millis): {}", (endDownloadTime - startDownloadTime) / 1_000_000);
-                             obtainClosestLonelySystems();
                          });
-    }
-
-    private void obtainClosestLonelySystems() {
-        List<SystemPair> closestLonelySystems = systemRepository.getClosestLonelySystems();
-        log.info("Systems paired:");
-        closestLonelySystems.forEach(pair -> log.info("- {} <-> {} -", pair.getSystemA().getName(),
-                                                      pair.getSystemB().getName()));
-        log.info("--------");
-        log.info("- Total pairs: {}", closestLonelySystems.size());
     }
 
     private void downloadSystemData() {
