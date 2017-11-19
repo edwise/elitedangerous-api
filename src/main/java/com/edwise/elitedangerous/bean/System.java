@@ -10,8 +10,8 @@ public class System {
 
         private Integer minorFactionId;
         private Integer stateId;
-        private Double  influence;
-        private String  state;
+        private Double influence;
+        private String state;
 
         public Integer getMinorFactionId() {
             return minorFactionId;
@@ -78,32 +78,32 @@ public class System {
 
     private Integer id;
     private Integer edsmId;
-    private String  name;
-    private Double  x;
-    private Double  y;
-    private Double  z;
-    private Long    population;
+    private String name;
+    private Double x;
+    private Double y;
+    private Double z;
+    private Long population;
     private Boolean isPopulated;
     private Integer governmentId;
-    private String  government;
+    private String government;
     private Integer allegianceId;
-    private String  allegiance;
+    private String allegiance;
     private Integer stateId;
-    private String  state;
+    private String state;
     private Integer securityId;
-    private String  security;
+    private String security;
     private Integer primaryEconomyId;
-    private String  primaryEconomy;
-    private String  power;
-    private String  powerState;
+    private String primaryEconomy;
+    private String power;
+    private String powerState;
     private Integer powerStateId;
     private Boolean needsPermit;
     private Integer updatedAt;
-    private String  simbadRef;
+    private String simbadRef;
     private Integer controllingMinorFactionId;
-    private String  controllingMinorFaction;
+    private String controllingMinorFaction;
     private Integer reserveTypeId;
-    private String  reserveType;
+    private String reserveType;
     private List<MinorFactionPresence> minorFactionPresences = new ArrayList<>();
 
     public Integer getId() {

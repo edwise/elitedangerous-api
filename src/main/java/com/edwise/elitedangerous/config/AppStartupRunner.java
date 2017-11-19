@@ -31,10 +31,10 @@ public class AppStartupRunner implements ApplicationRunner {
 
     private ObjectMapper objectMapper;
 
-    private DownloadService   downloadService;
+    private DownloadService downloadService;
     private FactionRepository factionRepository;
     private StationRepository stationRepository;
-    private SystemRepository  systemRepository;
+    private SystemRepository systemRepository;
 
     @Autowired
     public AppStartupRunner(EddbConfig eddbConfig, DownloadService downloadService, ObjectMapper objectMapper,

@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.within;
 
 public class SystemRepositoryImplTest {
     private static final double LIGHT_YEARS_BETWEEN_SOL_AND_ALPHA_CENTAURI = 4.38D;
-    private static final double LIGHT_YEARS_BETWEEN_ODUDURO_AND_SIKSIKAS   = 163.91D;
+    private static final double LIGHT_YEARS_BETWEEN_ODUDURO_AND_SIKSIKAS = 163.91D;
 
     private SystemRepository systemRepository;
 

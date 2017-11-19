@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Repository
 public class SystemRepositoryImpl implements SystemRepository {
-    private static final Logger log            = LoggerFactory.getLogger(SystemRepositoryImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(SystemRepositoryImpl.class);
     private static final double CLOSE_DISTANCE = 20D;
 
     private List<System> systems = new ArrayList<>();
