@@ -1,6 +1,6 @@
 package com.edwise.elitedangerous.controller;
 
-import com.edwise.elitedangerous.bean.SystemPair;
+import com.edwise.elitedangerous.model.SystemPairModel;
 import com.edwise.elitedangerous.service.SystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,8 +23,8 @@ public class ClosestLonelySystemsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SystemPair>> getAllClosestLonelySystems() {
-        List<SystemPair> systemPairs = systemService.obtainClosestLonelySystems();
+    public ResponseEntity<List<SystemPairModel>> getAllClosestLonelySystems() {
+        List<SystemPairModel> systemPairs = systemService.obtainClosestLonelySystems();
         return new ResponseEntity<>(systemPairs, HttpStatus.OK);
     }
 }
