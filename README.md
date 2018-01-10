@@ -1,6 +1,6 @@
 # elitedangerous-api
 
-[![Build status](https://circleci.com/gh/edwise/elitedangerous-api.svg?style=shield&circle-token=66bc8915d545f8ee63092a46484bfd7fbad60bb4)](https://circleci.com/gh/edwise/circleci)
+[![Build status](https://circleci.com/gh/edwise/elitedangerous-api.svg?style=shield&circle-token=66bc8915d545f8ee63092a46484bfd7fbad60bb4)](https://circleci.com/gh/edwise/elitedangerous-api)
 
 Project for play with the eddb.io data
 
