@@ -1,7 +1,8 @@
 package com.edwise.elitedangerous.controller;
 
-import com.edwise.elitedangerous.bean.System;
 import com.edwise.elitedangerous.bean.SystemPair;
+import com.edwise.elitedangerous.model.SystemModel;
+import com.edwise.elitedangerous.model.SystemPairModel;
 import com.edwise.elitedangerous.service.SystemService;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,10 +34,11 @@ public class ClosestLonelySystemsControllerTest {
     @Test
     public void getAllClosestLonelySystemsShouldReturnPairs() {
         when(systemService.obtainClosestLonelySystems())
-                .thenReturn(Arrays.asList(new SystemPair(new System(), new System()),
-                                          new SystemPair(new System(), new System())));
+                .thenReturn(Arrays.asList(new SystemPairModel(new SystemModel(), new SystemModel()),
+                                          new SystemPairModel(new SystemModel(), new SystemModel())));
 
-        ResponseEntity<List<SystemPair>> allClosestLonelySystems = closestLonelySystemsController.getAllClosestLonelySystems();
+        ResponseEntity<List<SystemPairModel>> allClosestLonelySystems =
+                closestLonelySystemsController.getAllClosestLonelySystems();
 
         assertThat(allClosestLonelySystems.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(allClosestLonelySystems.getBody()).hasSize(2);
