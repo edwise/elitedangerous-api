@@ -1,10 +1,10 @@
 package com.edwise.elitedangerous.model;
 
+import lombok.Data;
+
 import java.util.Objects;
 
-/**
- * Created by Eduardo Antón <eduardo.anton@taptapnetworks.com> on 03/01/2018.
- */
+@Data
 public class SystemPairModel {
 
     private SystemModel systemA;
@@ -12,22 +12,6 @@ public class SystemPairModel {
 
     public SystemPairModel(SystemModel systemA, SystemModel systemB) {
         this.systemA = systemA;
-        this.systemB = systemB;
-    }
-
-    public SystemModel getSystemA() {
-        return systemA;
-    }
-
-    public void setSystemA(SystemModel systemA) {
-        this.systemA = systemA;
-    }
-
-    public SystemModel getSystemB() {
-        return systemB;
-    }
-
-    public void setSystemB(SystemModel systemB) {
         this.systemB = systemB;
     }
 
@@ -49,11 +33,4 @@ public class SystemPairModel {
         return Objects.hash(systemA, systemB);
     }
 
-    @Override
-    public String toString() {
-        return "SystemPairModel{" +
-               "systemA=" + systemA +
-               ", systemB=" + systemB +
-               '}';
-    }
 }
