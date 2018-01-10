@@ -1,32 +1,18 @@
 package com.edwise.elitedangerous.bean;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.Objects;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class SystemPair {
 
     private System systemA;
     private System systemB;
-
-    public SystemPair(System systemA, System systemB) {
-        this.systemA = systemA;
-        this.systemB = systemB;
-    }
-
-    public System getSystemA() {
-        return systemA;
-    }
-
-    public void setSystemA(System systemA) {
-        this.systemA = systemA;
-    }
-
-    public System getSystemB() {
-        return systemB;
-    }
-
-    public void setSystemB(System systemB) {
-        this.systemB = systemB;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -50,13 +36,5 @@ public class SystemPair {
         int hashSum = systemA.hashCode() + systemB.hashCode();
         hash = hashMultiplikator * hash * hashSum;
         return hash;
-    }
-
-    @Override
-    public String toString() {
-        return "SystemPair{" +
-               "systemA=" + systemA +
-               ", systemB=" + systemB +
-               '}';
     }
 }
