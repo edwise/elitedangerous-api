@@ -1,8 +1,7 @@
 package com.edwise.elitedangerous.service.impl;
 
 import com.edwise.elitedangerous.service.DownloadService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,9 +10,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class DownloadServiceImpl implements DownloadService {
-    private static final Logger log = LoggerFactory.getLogger(DownloadServiceImpl.class);
 
     private RestTemplate restTemplate;
 
