@@ -2,8 +2,7 @@ package com.edwise.elitedangerous.repository.impl;
 
 import com.edwise.elitedangerous.bean.Faction;
 import com.edwise.elitedangerous.repository.FactionRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -12,9 +11,9 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Repository
 public class FactionRepositoryImpl implements FactionRepository {
-    private static final Logger log = LoggerFactory.getLogger(FactionRepositoryImpl.class);
 
     private Map<Integer, Faction> factions = new HashMap<>();
 

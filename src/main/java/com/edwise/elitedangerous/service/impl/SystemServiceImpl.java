@@ -4,17 +4,16 @@ import com.edwise.elitedangerous.bean.SystemPair;
 import com.edwise.elitedangerous.model.SystemPairModel;
 import com.edwise.elitedangerous.repository.SystemRepository;
 import com.edwise.elitedangerous.service.SystemService;
+import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFacade;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class SystemServiceImpl implements SystemService {
-    private static final Logger log = LoggerFactory.getLogger(SystemServiceImpl.class);
 
     private SystemRepository systemRepository;
     private MapperFacade mapper;

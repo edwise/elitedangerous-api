@@ -10,8 +10,7 @@ import com.edwise.elitedangerous.repository.SystemRepository;
 import com.edwise.elitedangerous.service.DownloadService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -23,9 +22,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+@Slf4j
 @Component
 public class AppStartupRunner implements ApplicationRunner {
-    private static final Logger log = LoggerFactory.getLogger(AppStartupRunner.class);
 
     private final EddbConfig eddbConfig;
 
@@ -49,7 +48,7 @@ public class AppStartupRunner implements ApplicationRunner {
     }
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
         log.info("Initializing app, filling repositories...");
 
         long startDownloadTime = java.lang.System.nanoTime();
