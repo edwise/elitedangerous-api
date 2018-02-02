@@ -1,6 +1,5 @@
 package com.edwise.elitedangerous.controller;
 
-import com.edwise.elitedangerous.bean.SystemPair;
 import com.edwise.elitedangerous.model.SystemModel;
 import com.edwise.elitedangerous.model.SystemPairModel;
 import com.edwise.elitedangerous.service.SystemService;
