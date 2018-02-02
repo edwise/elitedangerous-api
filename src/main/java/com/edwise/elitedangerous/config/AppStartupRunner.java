@@ -49,7 +49,7 @@ public class AppStartupRunner implements ApplicationRunner {
     }
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
         log.info("Initializing app, filling repositories...");
 
         long startDownloadTime = java.lang.System.nanoTime();
