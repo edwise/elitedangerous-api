@@ -1,5 +1,6 @@
 package com.edwise.elitedangerous.bean;
 
+import com.edwise.elitedangerous.bean.enums.Allegiance;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class System {
     private Integer governmentId;
     private String government;
     private Integer allegianceId;
-    private String allegiance;
+    private Allegiance allegiance;
     private Integer stateId;
     private String state;
     private Integer securityId;
