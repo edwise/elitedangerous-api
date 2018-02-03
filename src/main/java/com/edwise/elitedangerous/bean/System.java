@@ -1,6 +1,7 @@
 package com.edwise.elitedangerous.bean;
 
 import com.edwise.elitedangerous.bean.enums.Allegiance;
+import com.edwise.elitedangerous.bean.enums.Security;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class System {
     private Integer stateId;
     private String state;
     private Integer securityId;
-    private String security;
+    private Security security;
     private Integer primaryEconomyId;
     private String primaryEconomy;
     private String power;
