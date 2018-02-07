@@ -1,18 +1,19 @@
 package com.edwise.elitedangerous.controller;
 
 import com.edwise.elitedangerous.model.SystemPairModel;
+import com.edwise.elitedangerous.model.SystemsQuery;
 import com.edwise.elitedangerous.service.SystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/closestlonelysystems")
+@RequestMapping(path = "/api/closestlonelysystems", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ClosestLonelySystemsController {
 
     private SystemService systemService;
@@ -25,6 +26,17 @@ public class ClosestLonelySystemsController {
     @GetMapping
     public ResponseEntity<List<SystemPairModel>> getAllClosestLonelySystems() {
         List<SystemPairModel> systemPairs = systemService.obtainClosestLonelySystems();
+        return new ResponseEntity<>(systemPairs, HttpStatus.OK);
+    }
+
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<SystemPairModel>> getAllClosestLonelySystems(@Valid @RequestBody SystemsQuery systemsQuery) {
+        if (systemsQuery.getClosestDistance() <= 0) {
+            // TODO Improve response
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        List<SystemPairModel> systemPairs = systemService.obtainClosestLonelySystems(systemsQuery.getAllegiance(),
+                                                                                     systemsQuery.getClosestDistance());
         return new ResponseEntity<>(systemPairs, HttpStatus.OK);
     }
 }

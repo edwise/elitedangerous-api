@@ -2,6 +2,7 @@ package com.edwise.elitedangerous.service.impl;
 
 import com.edwise.elitedangerous.bean.System;
 import com.edwise.elitedangerous.bean.SystemPair;
+import com.edwise.elitedangerous.bean.enums.Allegiance;
 import com.edwise.elitedangerous.model.SystemModel;
 import com.edwise.elitedangerous.model.SystemPairModel;
 import com.edwise.elitedangerous.repository.SystemRepository;
@@ -43,6 +44,18 @@ public class SystemServiceImplTest {
                 .thenReturn(Arrays.asList(createSystemPairModelMock(), createSystemPairModelMock()));
 
         List<SystemPairModel> systemPairs = systemService.obtainClosestLonelySystems();
+
+        assertThat(systemPairs).hasSize(2);
+    }
+
+    @Test
+    public void obtainClosestLonelySystemsWithParamsShouldCalculateLonelySystems() {
+        List<SystemPair> repositoryResult = Arrays.asList(createSystemPairMock(), createSystemPairMock());
+        when(systemRepository.getClosestLonelySystems(Allegiance.FEDERATION, 12.0D)).thenReturn(repositoryResult);
+        when(mapper.mapAsList(repositoryResult, SystemPairModel.class))
+                .thenReturn(Arrays.asList(createSystemPairModelMock(), createSystemPairModelMock()));
+
+        List<SystemPairModel> systemPairs = systemService.obtainClosestLonelySystems(Allegiance.FEDERATION, 12.0D);
 
         assertThat(systemPairs).hasSize(2);
     }

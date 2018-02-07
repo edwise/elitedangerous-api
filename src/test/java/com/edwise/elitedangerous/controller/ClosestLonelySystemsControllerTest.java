@@ -1,7 +1,9 @@
 package com.edwise.elitedangerous.controller;
 
+import com.edwise.elitedangerous.bean.enums.Allegiance;
 import com.edwise.elitedangerous.model.SystemModel;
 import com.edwise.elitedangerous.model.SystemPairModel;
+import com.edwise.elitedangerous.model.SystemsQuery;
 import com.edwise.elitedangerous.service.SystemService;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,6 +40,22 @@ public class ClosestLonelySystemsControllerTest {
 
         ResponseEntity<List<SystemPairModel>> allClosestLonelySystems =
                 closestLonelySystemsController.getAllClosestLonelySystems();
+
+        assertThat(allClosestLonelySystems.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(allClosestLonelySystems.getBody()).hasSize(2);
+    }
+
+    @Test
+    public void postGetAllClosestLonelySystemsShouldReturnPairs() {
+        when(systemService.obtainClosestLonelySystems(Allegiance.FEDERATION, 12.0D))
+                .thenReturn(Arrays.asList(new SystemPairModel(new SystemModel(), new SystemModel()),
+                                          new SystemPairModel(new SystemModel(), new SystemModel())));
+        SystemsQuery systemsQuery = new SystemsQuery();
+        systemsQuery.setAllegiance(Allegiance.FEDERATION);
+        systemsQuery.setClosestDistance(12.0D);
+
+        ResponseEntity<List<SystemPairModel>> allClosestLonelySystems =
+                closestLonelySystemsController.getAllClosestLonelySystems(systemsQuery);
 
         assertThat(allClosestLonelySystems.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(allClosestLonelySystems.getBody()).hasSize(2);

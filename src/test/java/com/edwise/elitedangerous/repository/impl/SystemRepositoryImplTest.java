@@ -2,6 +2,7 @@ package com.edwise.elitedangerous.repository.impl;
 
 import com.edwise.elitedangerous.bean.System;
 import com.edwise.elitedangerous.bean.SystemPair;
+import com.edwise.elitedangerous.bean.enums.Allegiance;
 import com.edwise.elitedangerous.repository.SystemRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,24 +62,60 @@ public class SystemRepositoryImplTest {
 
     }
 
+    @Test
+    public void getClosestLonelySystemsWithParamsShouldReturnPairSystems() {
+        SystemPair expectedResult = new SystemPair(createSOLSystem(), createAlphaCentauriSystem());
+        systemRepository.fillData(Arrays.asList(createSOLSystem(), createAlphaCentauriSystem(),
+                                                createSiksikasSystem(), createOduduroSystem()));
+
+        List<SystemPair> closestLonelySystems =
+                systemRepository.getClosestLonelySystems(Allegiance.FEDERATION, 4.5D);
+
+        assertThat(closestLonelySystems).containsExactly(expectedResult);
+    }
+
+    @Test
+    public void getClosestLonelySystemsWithParamsShouldReturnNoResultWhenDistanceNotMatch() {
+        systemRepository.fillData(Arrays.asList(createSOLSystem(), createAlphaCentauriSystem(),
+                                                createSiksikasSystem(), createOduduroSystem()));
+
+        List<SystemPair> closestLonelySystems =
+                systemRepository.getClosestLonelySystems(Allegiance.FEDERATION, 3D);
+
+        assertThat(closestLonelySystems).isEmpty();
+    }
+
+    @Test
+    public void getClosestLonelySystemsWithParamsShouldReturnNoResultWhenAllegianceNotMatch() {
+        systemRepository.fillData(Arrays.asList(createSOLSystem(), createAlphaCentauriSystem(),
+                                                createSiksikasSystem(), createOduduroSystem()));
+
+        List<SystemPair> closestLonelySystems =
+                systemRepository.getClosestLonelySystems(Allegiance.EMPIRE, 4.5D);
+
+        assertThat(closestLonelySystems).isEmpty();
+    }
+
     private System createSiksikasSystem() {
-        System solSystem = new System();
-        solSystem.setId(16942);
-        solSystem.setName("Siksikas");
-        solSystem.setX(105.09375D);
-        solSystem.setY(-140.78125D);
-        solSystem.setZ(-13.96875D);
-        return solSystem;
+        System system = new System();
+        system.setId(16942);
+        system.setName("Siksikas");
+        system.setX(105.09375D);
+        system.setY(-140.78125D);
+        system.setZ(-13.96875D);
+        system.setAllegiance(Allegiance.INDEPENDENT);
+        return system;
     }
 
     private System createOduduroSystem() {
-        System solSystem = new System();
-        solSystem.setId(14900);
-        solSystem.setName("Oduduro");
-        solSystem.setX(-7.90625D);
-        solSystem.setY(-23.375D);
-        solSystem.setZ(-31.625D);
-        return solSystem;
+        System system = new System();
+        system.setId(14900);
+        system.setName("Oduduro");
+        system.setX(-7.90625D);
+        system.setY(-23.375D);
+        system.setZ(-31.625D);
+        system.setAllegiance(Allegiance.EMPIRE);
+        return system;
     }
 
     private System createSOLSystem() {
@@ -88,6 +125,7 @@ public class SystemRepositoryImplTest {
         solSystem.setX(0D);
         solSystem.setY(0D);
         solSystem.setZ(0D);
+        solSystem.setAllegiance(Allegiance.FEDERATION);
         return solSystem;
     }
 
@@ -98,6 +136,7 @@ public class SystemRepositoryImplTest {
         alphaCentauriSystem.setX(3.03125D);
         alphaCentauriSystem.setY(-0.09375D);
         alphaCentauriSystem.setZ(3.15625D);
+        alphaCentauriSystem.setAllegiance(Allegiance.FEDERATION);
         return alphaCentauriSystem;
     }
 

@@ -1,6 +1,7 @@
 package com.edwise.elitedangerous.service.impl;
 
 import com.edwise.elitedangerous.bean.SystemPair;
+import com.edwise.elitedangerous.bean.enums.Allegiance;
 import com.edwise.elitedangerous.model.SystemPairModel;
 import com.edwise.elitedangerous.repository.SystemRepository;
 import com.edwise.elitedangerous.service.SystemService;
@@ -30,6 +31,16 @@ public class SystemServiceImpl implements SystemService {
         List<SystemPair> closestLonelySystems = systemRepository.getClosestLonelySystems();
         long endDownloadTime = java.lang.System.nanoTime();
         log.info("Total closest lonely system calculation (millis): {}", (endDownloadTime - startDownloadTime) / 1_000_000);
+        return mapper.mapAsList(closestLonelySystems, SystemPairModel.class);
+    }
+
+    @Override
+    public List<SystemPairModel> obtainClosestLonelySystems(Allegiance allegiance, double closestDistance) {
+        long startDownloadTime = java.lang.System.nanoTime();
+        List<SystemPair> closestLonelySystems = systemRepository.getClosestLonelySystems(allegiance, closestDistance);
+        long endDownloadTime = java.lang.System.nanoTime();
+        log.info("Total closest lonely system calculation with params (millis): {}",
+                 (endDownloadTime - startDownloadTime) / 1_000_000);
         return mapper.mapAsList(closestLonelySystems, SystemPairModel.class);
     }
 }
