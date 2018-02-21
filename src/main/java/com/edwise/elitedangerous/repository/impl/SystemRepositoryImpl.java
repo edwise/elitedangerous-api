@@ -32,7 +32,7 @@ public class SystemRepositoryImpl implements SystemRepository {
     @Override
     public List<SystemPair> getClosestLonelySystems() {
         return systems.parallelStream()
-                      .map(system -> findSystemPair(system, null, DEFAULT_CLOSE_DISTANCE))
+                      .map(system -> findSystemPair(system, DEFAULT_CLOSE_DISTANCE))
                       .filter(Objects::nonNull)
                       .distinct()
                       .collect(Collectors.toList());
@@ -41,28 +41,23 @@ public class SystemRepositoryImpl implements SystemRepository {
     @Override
     public List<SystemPair> getClosestLonelySystems(Allegiance allegiance, double closeDistance) {
         return systems.parallelStream()
-                      .filter(system -> hasAllegiance(system, allegiance))
-                      .map(system -> findSystemPair(system, allegiance, closeDistance))
+                      .map(system -> findSystemPair(system, closeDistance))
                       .filter(Objects::nonNull)
                       .distinct()
+                      .filter(pair -> pair.hasAllegiance(allegiance))
                       .collect(Collectors.toList());
     }
 
-    private SystemPair findSystemPair(System system, Allegiance allegiance, double closeDistance) {
-        List<System> nearSystems = findNearSystems(system, allegiance, closeDistance);
+    private SystemPair findSystemPair(System system, double closeDistance) {
+        List<System> nearSystems = findNearSystems(system, closeDistance);
         return nearSystems.size() == 1 ? new SystemPair(system, nearSystems.get(0)) : null;
     }
 
-    private List<System> findNearSystems(System system, Allegiance allegiance, double closeDistance) {
+    private List<System> findNearSystems(System system, double closeDistance) {
         return systems.stream()
-                      .filter(otherSystem -> hasAllegiance(otherSystem, allegiance))
                       .filter(otherSystem -> !system.equals(otherSystem))
                       .filter(otherSystem -> system.distanceTo(otherSystem) < closeDistance)
                       .collect(Collectors.toList());
-    }
-
-    private boolean hasAllegiance(System system, Allegiance allegiance) {
-        return allegiance == null || allegiance.equals(system.getAllegiance());
     }
 
 }
