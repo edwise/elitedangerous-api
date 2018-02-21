@@ -1,5 +1,6 @@
 package com.edwise.elitedangerous.bean;
 
+import com.edwise.elitedangerous.bean.enums.Allegiance;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -34,5 +35,10 @@ public class SystemPair {
         int hashSum = systemA.hashCode() + systemB.hashCode();
         hash = hashMultiplikator * hash * hashSum;
         return hash;
+    }
+
+    public boolean hasAllegiance(Allegiance allegiance) {
+        return allegiance == null ||
+               (allegiance.equals(systemA.getAllegiance()) && allegiance.equals(systemB.getAllegiance()));
     }
 }

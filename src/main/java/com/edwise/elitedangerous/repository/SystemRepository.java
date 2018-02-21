@@ -7,7 +7,7 @@ import com.edwise.elitedangerous.bean.enums.Allegiance;
 import java.util.List;
 
 public interface SystemRepository {
-    double DEFAULT_CLOSE_DISTANCE = 20D;
+    double DEFAULT_CLOSE_DISTANCE = 15D;
 
     void fillData(List<System> systemsList);
 
