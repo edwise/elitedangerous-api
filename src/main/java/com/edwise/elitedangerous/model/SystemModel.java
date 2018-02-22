@@ -5,6 +5,8 @@ import com.edwise.elitedangerous.bean.enums.Security;
 import com.edwise.elitedangerous.bean.enums.State;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class SystemModel {
 
@@ -14,4 +16,7 @@ public class SystemModel {
     private State state;
     private Security security;
     private Long population;
+
+    private List<FactionModel> factions;
+    private List<StationModel> stations;
 }
