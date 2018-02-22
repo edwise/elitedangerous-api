@@ -1,11 +1,15 @@
 package com.edwise.elitedangerous.repository.impl;
 
 import com.edwise.elitedangerous.bean.Station;
+import com.edwise.elitedangerous.bean.System;
 import com.edwise.elitedangerous.repository.StationRepository;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class StationRepositoryImplTest {
 
@@ -26,4 +30,30 @@ public class StationRepositoryImplTest {
         stationRepository.fillData(Arrays.asList(station1, station2));
     }
 
+    @Test
+    public void getStationsShouldReturnListStationOfSystem() {
+        Station station1 = createMockStation(1234, 123);
+        Station station2 = createMockStation(5678, 123);
+        Station station3 = createMockStation(9999, 456);
+        stationRepository.fillData(Arrays.asList(station1, station2, station3));
+        System mockSystem = createMockSystem(123);
+
+        List<Station> stations = stationRepository.getStations(mockSystem);
+
+        assertThat(stations).containsExactlyInAnyOrder(station1, station2);
+    }
+
+    private Station createMockStation(Integer id, Integer systemId) {
+        Station station = new Station();
+        station.setId(id);
+        station.setSystemId(systemId);
+        return station;
+    }
+
+    private System createMockSystem(Integer id) {
+        System system = new System();
+        system.setId(id);
+        system.setName("Test System");
+        return system;
+    }
 }

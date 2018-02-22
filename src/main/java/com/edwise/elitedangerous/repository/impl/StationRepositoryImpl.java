@@ -1,6 +1,7 @@
 package com.edwise.elitedangerous.repository.impl;
 
 import com.edwise.elitedangerous.bean.Station;
+import com.edwise.elitedangerous.bean.System;
 import com.edwise.elitedangerous.repository.StationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -22,5 +23,13 @@ public class StationRepositoryImpl implements StationRepository {
         stations = stationsList.stream()
                                .collect(Collectors.toMap(Station::getId, Function.identity()));
         log.info("Size of stations json downloaded: {}", stations.size());
+    }
+
+    @Override
+    public List<Station> getStations(System system) {
+        return stations.values()
+                       .stream()
+                       .filter(station -> station.getSystemId().equals(system.getId()))
+                       .collect(Collectors.toList());
     }
 }
