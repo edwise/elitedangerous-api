@@ -1,7 +1,6 @@
 package com.edwise.elitedangerous.repository.impl;
 
 import com.edwise.elitedangerous.bean.Station;
-import com.edwise.elitedangerous.bean.System;
 import com.edwise.elitedangerous.repository.StationRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,9 +35,8 @@ public class StationRepositoryImplTest {
         Station station2 = createMockStation(5678, 123);
         Station station3 = createMockStation(9999, 456);
         stationRepository.fillData(Arrays.asList(station1, station2, station3));
-        System mockSystem = createMockSystem(123);
 
-        List<Station> stations = stationRepository.getStations(mockSystem);
+        List<Station> stations = stationRepository.getStationsBySystemId(123);
 
         assertThat(stations).containsExactlyInAnyOrder(station1, station2);
     }
@@ -50,10 +48,4 @@ public class StationRepositoryImplTest {
         return station;
     }
 
-    private System createMockSystem(Integer id) {
-        System system = new System();
-        system.setId(id);
-        system.setName("Test System");
-        return system;
-    }
 }
