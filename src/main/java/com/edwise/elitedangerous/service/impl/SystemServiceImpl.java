@@ -77,15 +77,22 @@ public class SystemServiceImpl implements SystemService {
     private void enrichStations(SystemModel systemModel) {
         List<Station> stations = stationRepository.getStationsBySystemId(systemModel.getId());
         systemModel.setStations(mapper.mapAsList(stations, StationModel.class));
+        systemModel.getStations()
+                   .forEach(this::enrichStation);
+    }
+
+    private void enrichStation(StationModel station) {
+        Faction faction = factionRepository.getFactionById(station.getControllingMinorFactionId());
+        station.setControllingMinorFaction(faction.getName());
     }
 
     private void enrichFactions(SystemModel systemModel) {
         systemModel.getFactions()
-                   .forEach(factionModel -> enrichFaction(systemModel, factionModel));
+                   .forEach(this::enrichFaction);
     }
 
-    private void enrichFaction(SystemModel systemModel, FactionModel factionModel) {
-        Faction faction = factionRepository.getFactionById(systemModel.getId());
+    private void enrichFaction(FactionModel factionModel) {
+        Faction faction = factionRepository.getFactionById(factionModel.getId());
         factionModel.setAllegiance(faction.getAllegiance());
         factionModel.setName(faction.getName());
     }
