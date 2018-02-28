@@ -9,5 +9,6 @@ public interface SystemService {
 
     List<SystemPairModel> obtainClosestLonelySystems();
 
-    List<SystemPairModel> obtainClosestLonelySystems(Allegiance allegiance, double closestDistance);
+    List<SystemPairModel> obtainClosestLonelySystems(Allegiance allegiance, double closestDistance,
+                                                     boolean withFactionsAndStations);
 }

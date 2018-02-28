@@ -47,7 +47,7 @@ public class ClosestLonelySystemsControllerTest {
 
     @Test
     public void postGetAllClosestLonelySystemsShouldReturnPairs() {
-        when(systemService.obtainClosestLonelySystems(Allegiance.FEDERATION, 12.0D))
+        when(systemService.obtainClosestLonelySystems(Allegiance.FEDERATION, 12.0D, false))
                 .thenReturn(Arrays.asList(new SystemPairModel(new SystemModel(), new SystemModel()),
                                           new SystemPairModel(new SystemModel(), new SystemModel())));
         SystemsQuery systemsQuery = new SystemsQuery();
