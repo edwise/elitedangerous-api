@@ -23,4 +23,9 @@ public class FactionRepositoryImpl implements FactionRepository {
                               .collect(Collectors.toMap(Faction::getId, Function.identity()));
         log.info("Size of factions json downloaded: {}", factions.size());
     }
+
+    @Override
+    public Faction getFactionById(Integer id) {
+        return factions.get(id);
+    }
 }

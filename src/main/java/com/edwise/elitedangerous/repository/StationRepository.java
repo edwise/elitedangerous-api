@@ -7,4 +7,6 @@ import java.util.List;
 public interface StationRepository {
 
     void fillData(List<Station> stationsList);
+
+    List<Station> getStationsBySystemId(Integer id);
 }

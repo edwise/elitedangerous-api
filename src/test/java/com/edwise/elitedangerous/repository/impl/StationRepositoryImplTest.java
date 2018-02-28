@@ -6,6 +6,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class StationRepositoryImplTest {
 
@@ -24,6 +27,25 @@ public class StationRepositoryImplTest {
         station2.setId(4567);
 
         stationRepository.fillData(Arrays.asList(station1, station2));
+    }
+
+    @Test
+    public void getStationsShouldReturnListStationOfSystem() {
+        Station station1 = createMockStation(1234, 123);
+        Station station2 = createMockStation(5678, 123);
+        Station station3 = createMockStation(9999, 456);
+        stationRepository.fillData(Arrays.asList(station1, station2, station3));
+
+        List<Station> stations = stationRepository.getStationsBySystemId(123);
+
+        assertThat(stations).containsExactlyInAnyOrder(station1, station2);
+    }
+
+    private Station createMockStation(Integer id, Integer systemId) {
+        Station station = new Station();
+        station.setId(id);
+        station.setSystemId(systemId);
+        return station;
     }
 
 }

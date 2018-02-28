@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -22,5 +23,14 @@ public class StationRepositoryImpl implements StationRepository {
         stations = stationsList.stream()
                                .collect(Collectors.toMap(Station::getId, Function.identity()));
         log.info("Size of stations json downloaded: {}", stations.size());
+    }
+
+    @Override
+    public List<Station> getStationsBySystemId(Integer id) {
+        return stations.values()
+                       .stream()
+                       .filter(station -> Objects.nonNull(station.getSystemId()))
+                       .filter(station -> station.getSystemId().equals(id))
+                       .collect(Collectors.toList());
     }
 }

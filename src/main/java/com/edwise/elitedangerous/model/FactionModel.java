@@ -4,9 +4,10 @@ import com.edwise.elitedangerous.bean.enums.Allegiance;
 import lombok.Data;
 
 @Data
-public class SystemsQuery {
+public class FactionModel {
 
+    private Integer id;
+    private String name;
     private Allegiance allegiance;
-    private Double closestDistance;
-    private boolean withFactionsAndStations;
+    private String state;
 }

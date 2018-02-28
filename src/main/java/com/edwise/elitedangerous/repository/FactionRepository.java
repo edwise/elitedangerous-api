@@ -7,4 +7,6 @@ import java.util.List;
 public interface FactionRepository {
 
     void fillData(List<Faction> factionList);
+
+    Faction getFactionById(Integer id);
 }
