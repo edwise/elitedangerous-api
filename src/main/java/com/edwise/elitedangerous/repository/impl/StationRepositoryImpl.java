@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,7 @@ public class StationRepositoryImpl implements StationRepository {
     public List<Station> getStationsBySystemId(Integer id) {
         return stations.values()
                        .stream()
+                       .filter(station -> Objects.nonNull(station.getSystemId()))
                        .filter(station -> station.getSystemId().equals(id))
                        .collect(Collectors.toList());
     }
