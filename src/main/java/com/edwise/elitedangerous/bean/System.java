@@ -12,7 +12,7 @@ import java.util.List;
 public class System {
 
     @Data
-    private class MinorFactionPresence {
+    public class MinorFactionPresence {
 
         private Integer minorFactionId;
         private Integer stateId;
