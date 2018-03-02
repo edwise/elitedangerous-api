@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -25,7 +26,7 @@ public class FactionRepositoryImpl implements FactionRepository {
     }
 
     @Override
-    public Faction getFactionById(Integer id) {
-        return factions.get(id);
+    public Optional<Faction> getFactionById(Integer id) {
+        return Optional.ofNullable(factions.get(id));
     }
 }

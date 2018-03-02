@@ -1,9 +1,11 @@
 package com.edwise.elitedangerous.model;
 
 import com.edwise.elitedangerous.bean.enums.Allegiance;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class StationModel {
 
     private Integer id;

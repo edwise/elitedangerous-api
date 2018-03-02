@@ -1,6 +1,5 @@
 package com.edwise.elitedangerous.service.impl;
 
-import com.edwise.elitedangerous.bean.Faction;
 import com.edwise.elitedangerous.bean.Station;
 import com.edwise.elitedangerous.bean.SystemPair;
 import com.edwise.elitedangerous.bean.enums.Allegiance;
@@ -59,8 +58,16 @@ public class SystemServiceImpl implements SystemService {
         List<SystemPairModel> systemPairModels = mapper.mapAsList(closestLonelySystems, SystemPairModel.class);
         if (withFactionsAndStations) {
             enrichSystems(systemPairModels);
+        } else {
+            removeNotNeed(systemPairModels);
         }
         return systemPairModels;
+    }
+
+    private void removeNotNeed(List<SystemPairModel> systemPairModels) {
+        systemPairModels.stream()
+                        .flatMap(systemPairModel -> Stream.of(systemPairModel.getSystemA(), systemPairModel.getSystemB()))
+                        .forEach(systemModel -> systemModel.setFactions(null));
     }
 
     private void enrichSystems(List<SystemPairModel> systemPairModels) {
@@ -82,8 +89,8 @@ public class SystemServiceImpl implements SystemService {
     }
 
     private void enrichStation(StationModel station) {
-        Faction faction = factionRepository.getFactionById(station.getControllingMinorFactionId());
-        station.setControllingMinorFaction(faction.getName());
+        factionRepository.getFactionById(station.getControllingMinorFactionId())
+                         .ifPresent(faction -> station.setControllingMinorFaction(faction.getName()));
     }
 
     private void enrichFactions(SystemModel systemModel) {
@@ -92,8 +99,10 @@ public class SystemServiceImpl implements SystemService {
     }
 
     private void enrichFaction(FactionModel factionModel) {
-        Faction faction = factionRepository.getFactionById(factionModel.getId());
-        factionModel.setAllegiance(faction.getAllegiance());
-        factionModel.setName(faction.getName());
+        factionRepository.getFactionById(factionModel.getId())
+                         .ifPresent(faction -> {
+                             factionModel.setAllegiance(faction.getAllegiance());
+                             factionModel.setName(faction.getName());
+                         });
     }
 }

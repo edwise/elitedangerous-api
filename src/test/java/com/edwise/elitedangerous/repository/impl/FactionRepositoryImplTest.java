@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,9 +37,9 @@ public class FactionRepositoryImplTest {
         faction2.setId(4567);
         factionRepository.fillData(Arrays.asList(faction1, faction2));
 
-        Faction faction = factionRepository.getFactionById(1234);
+        Optional<Faction> faction = factionRepository.getFactionById(1234);
 
-        assertThat(faction).isEqualTo(faction1);
+        assertThat(faction).hasValue(faction1);
     }
 
 }
