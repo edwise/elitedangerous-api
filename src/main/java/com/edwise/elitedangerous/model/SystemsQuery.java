@@ -7,6 +7,6 @@ import lombok.Data;
 public class SystemsQuery {
 
     private Allegiance allegiance;
-    private Double closestDistance;
+    private double closestDistance;
     private boolean withFactionsAndStations;
 }
