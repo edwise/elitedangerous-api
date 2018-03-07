@@ -44,7 +44,7 @@ public class SystemServiceImpl implements SystemService {
         List<SystemPair> closestLonelySystems = systemRepository.getClosestLonelySystems();
         long endDownloadTime = java.lang.System.nanoTime();
         log.info("Total closest lonely system calculation (millis): {}", (endDownloadTime - startDownloadTime) / 1_000_000);
-        return mapper.mapAsList(closestLonelySystems, SystemPairModel.class);
+        return removeNotNeed(mapper.mapAsList(closestLonelySystems, SystemPairModel.class));
     }
 
     @Override
@@ -71,7 +71,7 @@ public class SystemServiceImpl implements SystemService {
         List<SystemPair> oneStationPairs = closestLonelySystems.stream()
                                                                .filter(this::hasSystemWithOneStation)
                                                                .collect(Collectors.toList());
-        return mapper.mapAsList(oneStationPairs, SystemPairModel.class);
+        return removeNotNeed(mapper.mapAsList(oneStationPairs, SystemPairModel.class));
     }
 
     private boolean hasSystemWithOneStation(SystemPair pair) {
@@ -82,10 +82,11 @@ public class SystemServiceImpl implements SystemService {
         return stationsSystemA.size() == 1 || stationsSystemB.size() == 1;
     }
 
-    private void removeNotNeed(List<SystemPairModel> systemPairModels) {
+    private List<SystemPairModel> removeNotNeed(List<SystemPairModel> systemPairModels) {
         systemPairModels.stream()
                         .flatMap(systemPairModel -> Stream.of(systemPairModel.getSystemA(), systemPairModel.getSystemB()))
                         .forEach(systemModel -> systemModel.setFactions(null));
+        return systemPairModels;
     }
 
     private void enrichSystems(List<SystemPairModel> systemPairModels) {
