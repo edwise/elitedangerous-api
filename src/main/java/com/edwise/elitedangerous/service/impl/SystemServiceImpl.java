@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -43,7 +44,7 @@ public class SystemServiceImpl implements SystemService {
         List<SystemPair> closestLonelySystems = systemRepository.getClosestLonelySystems();
         long endDownloadTime = java.lang.System.nanoTime();
         log.info("Total closest lonely system calculation (millis): {}", (endDownloadTime - startDownloadTime) / 1_000_000);
-        return mapper.mapAsList(closestLonelySystems, SystemPairModel.class);
+        return removeNotNeed(mapper.mapAsList(closestLonelySystems, SystemPairModel.class));
     }
 
     @Override
@@ -64,10 +65,59 @@ public class SystemServiceImpl implements SystemService {
         return systemPairModels;
     }
 
-    private void removeNotNeed(List<SystemPairModel> systemPairModels) {
+    @Override
+    public List<SystemPairModel> obtainClosestLonelySystemsOneStation() {
+        List<SystemPair> oneStationPairs = filterOneStation(systemRepository.getClosestLonelySystems(), 0D);
+        return removeNotNeed(mapper.mapAsList(oneStationPairs, SystemPairModel.class));
+    }
+
+    private List<SystemPair> filterOneStation(List<SystemPair> closestLonelySystems, double minStationDistance) {
+        return closestLonelySystems.stream()
+                                   .filter(pair -> hasSystemWithOneStation(pair, minStationDistance))
+                                   .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SystemPairModel> obtainClosestLonelySystemsOneStation(Allegiance allegiance, double closestDistance,
+                                                                      boolean withFactionsAndStations,
+                                                                      double minStationDistance) {
+        long startDownloadTime = java.lang.System.nanoTime();
+        List<SystemPair> oneStationPairs = filterOneStation(systemRepository.getClosestLonelySystems(allegiance,
+                                                                                                     closestDistance),
+                                                            minStationDistance);
+        long endDownloadTime = java.lang.System.nanoTime();
+        log.info("Total closest lonely system calculation with params (millis): {}",
+                 (endDownloadTime - startDownloadTime) / 1_000_000);
+
+        List<SystemPairModel> systemPairModels = mapper.mapAsList(oneStationPairs, SystemPairModel.class);
+        if (withFactionsAndStations) {
+            enrichSystems(systemPairModels);
+        } else {
+            removeNotNeed(systemPairModels);
+        }
+        return systemPairModels;
+    }
+
+    private boolean hasSystemWithOneStation(SystemPair pair, double minStationDistance) {
+        List<Station> stationsSystemA =
+                stationRepository.getStationsBySystemId(pair.getSystemA().getId());
+        List<Station> stationsSystemB =
+                stationRepository.getStationsBySystemId(pair.getSystemB().getId());
+        return stationsSystemA.size() == 1 && isOnDistance(stationsSystemA.get(0), minStationDistance) ||
+               stationsSystemB.size() == 1 && isOnDistance(stationsSystemB.get(0), minStationDistance);
+    }
+
+    private boolean isOnDistance(Station station, double minStationDistance) {
+        return station.getDistanceToStar() != null ?
+               station.getDistanceToStar() > minStationDistance :
+               minStationDistance == 0;
+    }
+
+    private List<SystemPairModel> removeNotNeed(List<SystemPairModel> systemPairModels) {
         systemPairModels.stream()
                         .flatMap(systemPairModel -> Stream.of(systemPairModel.getSystemA(), systemPairModel.getSystemB()))
                         .forEach(systemModel -> systemModel.setFactions(null));
+        return systemPairModels;
     }
 
     private void enrichSystems(List<SystemPairModel> systemPairModels) {

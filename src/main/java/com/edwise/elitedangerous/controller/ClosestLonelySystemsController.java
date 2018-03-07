@@ -40,4 +40,25 @@ public class ClosestLonelySystemsController {
                                                                                      systemsQuery.isWithFactionsAndStations());
         return new ResponseEntity<>(systemPairs, HttpStatus.OK);
     }
+
+    @GetMapping("/onestation")
+    public ResponseEntity<List<SystemPairModel>> getAllClosestLonelySystemsOneStation() {
+        List<SystemPairModel> systemPairs = systemService.obtainClosestLonelySystemsOneStation();
+        return new ResponseEntity<>(systemPairs, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/onestation", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<SystemPairModel>> getAllClosestLonelySystemsOneStation(@Valid @RequestBody
+                                                                                              SystemsQuery systemsQuery) {
+        if (systemsQuery.getClosestDistance() <= 0) {
+            // TODO Improve response
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        List<SystemPairModel> systemPairs =
+                systemService.obtainClosestLonelySystemsOneStation(systemsQuery.getAllegiance(),
+                                                                   systemsQuery.getClosestDistance(),
+                                                                   systemsQuery.isWithFactionsAndStations(),
+                                                                   systemsQuery.getMinStationDistance());
+        return new ResponseEntity<>(systemPairs, HttpStatus.OK);
+    }
 }

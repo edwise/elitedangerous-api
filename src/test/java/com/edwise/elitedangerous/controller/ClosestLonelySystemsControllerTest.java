@@ -61,4 +61,32 @@ public class ClosestLonelySystemsControllerTest {
         assertThat(allClosestLonelySystems.getBody()).hasSize(2);
     }
 
+    @Test
+    public void getAllClosestLonelySystemsOneStationShouldReturnPairs() {
+        when(systemService.obtainClosestLonelySystemsOneStation())
+                .thenReturn(Arrays.asList(new SystemPairModel(new SystemModel(), new SystemModel()),
+                                          new SystemPairModel(new SystemModel(), new SystemModel())));
+
+        ResponseEntity<List<SystemPairModel>> allClosestLonelySystemsOneStation =
+                closestLonelySystemsController.getAllClosestLonelySystemsOneStation();
+
+        assertThat(allClosestLonelySystemsOneStation.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(allClosestLonelySystemsOneStation.getBody()).hasSize(2);
+    }
+
+    @Test
+    public void postGetAllClosestLonelySystemsOneStationShouldReturnPairs() {
+        when(systemService.obtainClosestLonelySystemsOneStation(Allegiance.FEDERATION, 12.0D, false, 0))
+                .thenReturn(Arrays.asList(new SystemPairModel(new SystemModel(), new SystemModel()),
+                                          new SystemPairModel(new SystemModel(), new SystemModel())));
+        SystemsQuery systemsQuery = new SystemsQuery();
+        systemsQuery.setAllegiance(Allegiance.FEDERATION);
+        systemsQuery.setClosestDistance(12.0D);
+
+        ResponseEntity<List<SystemPairModel>> allClosestLonelySystemsOneStation =
+                closestLonelySystemsController.getAllClosestLonelySystemsOneStation(systemsQuery);
+
+        assertThat(allClosestLonelySystemsOneStation.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(allClosestLonelySystemsOneStation.getBody()).hasSize(2);
+    }
 }
