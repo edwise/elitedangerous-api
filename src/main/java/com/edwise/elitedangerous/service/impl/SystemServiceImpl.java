@@ -67,11 +67,33 @@ public class SystemServiceImpl implements SystemService {
 
     @Override
     public List<SystemPairModel> obtainClosestLonelySystemsOneStation() {
-        List<SystemPair> closestLonelySystems = systemRepository.getClosestLonelySystems();
-        List<SystemPair> oneStationPairs = closestLonelySystems.stream()
-                                                               .filter(this::hasSystemWithOneStation)
-                                                               .collect(Collectors.toList());
+        List<SystemPair> oneStationPairs = filterOneStation(systemRepository.getClosestLonelySystems());
         return removeNotNeed(mapper.mapAsList(oneStationPairs, SystemPairModel.class));
+    }
+
+    private List<SystemPair> filterOneStation(List<SystemPair> closestLonelySystems) {
+        return closestLonelySystems.stream()
+                                   .filter(this::hasSystemWithOneStation)
+                                   .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SystemPairModel> obtainClosestLonelySystemsOneStation(Allegiance allegiance, double closestDistance,
+                                                                      boolean withFactionsAndStations) {
+        long startDownloadTime = java.lang.System.nanoTime();
+        List<SystemPair> oneStationPairs = filterOneStation(systemRepository.getClosestLonelySystems(allegiance,
+                                                                                                     closestDistance));
+        long endDownloadTime = java.lang.System.nanoTime();
+        log.info("Total closest lonely system calculation with params (millis): {}",
+                 (endDownloadTime - startDownloadTime) / 1_000_000);
+
+        List<SystemPairModel> systemPairModels = mapper.mapAsList(oneStationPairs, SystemPairModel.class);
+        if (withFactionsAndStations) {
+            enrichSystems(systemPairModels);
+        } else {
+            removeNotNeed(systemPairModels);
+        }
+        return systemPairModels;
     }
 
     private boolean hasSystemWithOneStation(SystemPair pair) {
