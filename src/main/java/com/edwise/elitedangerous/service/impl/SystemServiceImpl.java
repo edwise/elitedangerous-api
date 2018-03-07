@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -62,6 +63,23 @@ public class SystemServiceImpl implements SystemService {
             removeNotNeed(systemPairModels);
         }
         return systemPairModels;
+    }
+
+    @Override
+    public List<SystemPairModel> obtainClosestLonelySystemsOneStation() {
+        List<SystemPair> closestLonelySystems = systemRepository.getClosestLonelySystems();
+        List<SystemPair> oneStationPairs = closestLonelySystems.stream()
+                                                               .filter(this::hasSystemWithOneStation)
+                                                               .collect(Collectors.toList());
+        return mapper.mapAsList(oneStationPairs, SystemPairModel.class);
+    }
+
+    private boolean hasSystemWithOneStation(SystemPair pair) {
+        List<Station> stationsSystemA =
+                stationRepository.getStationsBySystemId(pair.getSystemA().getId());
+        List<Station> stationsSystemB =
+                stationRepository.getStationsBySystemId(pair.getSystemB().getId());
+        return stationsSystemA.size() == 1 || stationsSystemB.size() == 1;
     }
 
     private void removeNotNeed(List<SystemPairModel> systemPairModels) {
