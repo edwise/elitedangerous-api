@@ -67,22 +67,24 @@ public class SystemServiceImpl implements SystemService {
 
     @Override
     public List<SystemPairModel> obtainClosestLonelySystemsOneStation() {
-        List<SystemPair> oneStationPairs = filterOneStation(systemRepository.getClosestLonelySystems());
+        List<SystemPair> oneStationPairs = filterOneStation(systemRepository.getClosestLonelySystems(), 0D);
         return removeNotNeed(mapper.mapAsList(oneStationPairs, SystemPairModel.class));
     }
 
-    private List<SystemPair> filterOneStation(List<SystemPair> closestLonelySystems) {
+    private List<SystemPair> filterOneStation(List<SystemPair> closestLonelySystems, double minStationDistance) {
         return closestLonelySystems.stream()
-                                   .filter(this::hasSystemWithOneStation)
+                                   .filter(pair -> hasSystemWithOneStation(pair, minStationDistance))
                                    .collect(Collectors.toList());
     }
 
     @Override
     public List<SystemPairModel> obtainClosestLonelySystemsOneStation(Allegiance allegiance, double closestDistance,
-                                                                      boolean withFactionsAndStations) {
+                                                                      boolean withFactionsAndStations,
+                                                                      double minStationDistance) {
         long startDownloadTime = java.lang.System.nanoTime();
         List<SystemPair> oneStationPairs = filterOneStation(systemRepository.getClosestLonelySystems(allegiance,
-                                                                                                     closestDistance));
+                                                                                                     closestDistance),
+                                                            minStationDistance);
         long endDownloadTime = java.lang.System.nanoTime();
         log.info("Total closest lonely system calculation with params (millis): {}",
                  (endDownloadTime - startDownloadTime) / 1_000_000);
@@ -96,12 +98,17 @@ public class SystemServiceImpl implements SystemService {
         return systemPairModels;
     }
 
-    private boolean hasSystemWithOneStation(SystemPair pair) {
+    private boolean hasSystemWithOneStation(SystemPair pair, double minStationDistance) {
         List<Station> stationsSystemA =
                 stationRepository.getStationsBySystemId(pair.getSystemA().getId());
         List<Station> stationsSystemB =
                 stationRepository.getStationsBySystemId(pair.getSystemB().getId());
-        return stationsSystemA.size() == 1 || stationsSystemB.size() == 1;
+        return stationsSystemA.size() == 1 && isOnDistance(stationsSystemA.get(0), minStationDistance) ||
+               stationsSystemB.size() == 1 && isOnDistance(stationsSystemB.get(0), minStationDistance);
+    }
+
+    private boolean isOnDistance(Station station, double minStationDistance) {
+        return station.getDistanceToStar() == null || station.getDistanceToStar() > minStationDistance;
     }
 
     private List<SystemPairModel> removeNotNeed(List<SystemPairModel> systemPairModels) {

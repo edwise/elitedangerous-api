@@ -9,4 +9,5 @@ public class SystemsQuery {
     private Allegiance allegiance;
     private double closestDistance;
     private boolean withFactionsAndStations;
+    private double minStationDistance;
 }

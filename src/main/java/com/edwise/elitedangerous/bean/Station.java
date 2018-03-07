@@ -23,7 +23,7 @@ public class Station {
     private String maxLandingPadSize;
 
     @JsonProperty("distance_to_star")
-    private Integer distanceToStar;
+    private Double distanceToStar;
 
     @JsonProperty("government_id")
     private Integer governmentId;

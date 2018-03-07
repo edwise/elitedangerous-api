@@ -103,7 +103,7 @@ public class SystemServiceImplTest {
                 .thenReturn(Arrays.asList(createSystemPairModelMock(), createSystemPairModelMock()));
 
         List<SystemPairModel> systemPairs = systemService.obtainClosestLonelySystemsOneStation(Allegiance.FEDERATION,
-                                                                                               12.0D, true);
+                                                                                               12.0D, true, 0);
 
         assertThat(systemPairs).hasSize(2);
     }

@@ -57,7 +57,8 @@ public class ClosestLonelySystemsController {
         List<SystemPairModel> systemPairs =
                 systemService.obtainClosestLonelySystemsOneStation(systemsQuery.getAllegiance(),
                                                                    systemsQuery.getClosestDistance(),
-                                                                   systemsQuery.isWithFactionsAndStations());
+                                                                   systemsQuery.isWithFactionsAndStations(),
+                                                                   systemsQuery.getMinStationDistance());
         return new ResponseEntity<>(systemPairs, HttpStatus.OK);
     }
 }
