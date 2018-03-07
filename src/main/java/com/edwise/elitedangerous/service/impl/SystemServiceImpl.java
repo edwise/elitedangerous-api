@@ -108,7 +108,9 @@ public class SystemServiceImpl implements SystemService {
     }
 
     private boolean isOnDistance(Station station, double minStationDistance) {
-        return station.getDistanceToStar() == null || station.getDistanceToStar() > minStationDistance;
+        return station.getDistanceToStar() != null ?
+               station.getDistanceToStar() > minStationDistance :
+               minStationDistance == 0;
     }
 
     private List<SystemPairModel> removeNotNeed(List<SystemPairModel> systemPairModels) {
