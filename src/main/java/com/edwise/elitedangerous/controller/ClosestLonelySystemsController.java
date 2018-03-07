@@ -40,4 +40,10 @@ public class ClosestLonelySystemsController {
                                                                                      systemsQuery.isWithFactionsAndStations());
         return new ResponseEntity<>(systemPairs, HttpStatus.OK);
     }
+
+    @GetMapping("/onestation")
+    public ResponseEntity<List<SystemPairModel>> getAllClosestLonelySystemsOneStation() {
+        List<SystemPairModel> systemPairs = systemService.obtainClosestLonelySystemsOneStation();
+        return new ResponseEntity<>(systemPairs, HttpStatus.OK);
+    }
 }

@@ -61,4 +61,16 @@ public class ClosestLonelySystemsControllerTest {
         assertThat(allClosestLonelySystems.getBody()).hasSize(2);
     }
 
+    @Test
+    public void getAllClosestLonelySystemsOneStationShouldReturnPairs() {
+        when(systemService.obtainClosestLonelySystemsOneStation())
+                .thenReturn(Arrays.asList(new SystemPairModel(new SystemModel(), new SystemModel()),
+                                          new SystemPairModel(new SystemModel(), new SystemModel())));
+
+        ResponseEntity<List<SystemPairModel>> allClosestLonelySystemsOneStation =
+                closestLonelySystemsController.getAllClosestLonelySystemsOneStation();
+
+        assertThat(allClosestLonelySystemsOneStation.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(allClosestLonelySystemsOneStation.getBody()).hasSize(2);
+    }
 }
