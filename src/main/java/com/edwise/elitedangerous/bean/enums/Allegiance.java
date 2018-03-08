@@ -12,6 +12,7 @@ public enum Allegiance {
     EMPIRE("Empire"),
     ALLIANCE("Alliance"),
     INDEPENDENT("Independent"),
+    NONE("None"),
     PILOTS_FEDERATION("Pilots Federation");
 
     private String name;
